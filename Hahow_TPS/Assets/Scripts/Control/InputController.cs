@@ -43,7 +43,7 @@ public class InputController : MonoBehaviour
     {
         if (CheckCursorState())
         {
-            return Input.GetKeyDown(KeyCode.LeftControl);
+            return Input.GetKey(KeyCode.LeftControl);
         }
         return false;
     }

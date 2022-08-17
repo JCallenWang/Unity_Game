@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("速度參數")]
     [SerializeField] float speed = 5;
     [Range(1, 5)] [SerializeField] float sprintSpeedModifier = 3;
-    [Range(0, 1)] [SerializeField] float coruchSpeedModifier = 0.5f;
+    [Range(0, 1)] [SerializeField] float crouchSpeedModifier = 0.5f;
     [SerializeField] float rotateSpeed = 5;
     [Tooltip("動畫切換參數比例")] [Range(0.01f, 0.1f)] [SerializeField] float AnimationTransitionRatio = 0.05f;
     [Header("跳躍參數")]
@@ -54,9 +54,11 @@ public class PlayerController : MonoBehaviour
         float nextFrameSpeed = 0;
 
         //移動速度判斷條件
-        if(targetMovement == Vector3.zero)
+        if (targetMovement == Vector3.zero)
         {
             nextFrameSpeed = 0f;
+            lastFrameSpeed = Mathf.Lerp(lastFrameSpeed, 0, AnimationTransitionRatio);
+
         }
         else if (main_Input.GetSprintInput())
         {
@@ -70,6 +72,17 @@ public class PlayerController : MonoBehaviour
             nextFrameSpeed = 0.5f;
 
             SmoothRotation(targetMovement);
+        }
+
+        //如果按下蹲走
+        if (main_Input.GetCrouchInput())
+        {
+            targetMovement *= crouchSpeedModifier;
+            animator.SetBool("IsCrouch", true);
+        }
+        else
+        {
+            animator.SetBool("IsCrouch", false);
         }
 
         //避免動畫切換太快
@@ -105,12 +118,12 @@ public class PlayerController : MonoBehaviour
         //Vector3.up 下方的向量方向，始終固定
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround);
     }
-
     //平滑的轉向目標
     private void SmoothRotation(Vector3 targetMove)
     {
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetMove, Vector3.up), rotateSpeed * Time.deltaTime);
     }
+
 
     //取得相機的水平方向
     private Vector3 GetCameraRight()
