@@ -29,7 +29,11 @@ public class Fighter : MonoBehaviour
     void Update()
     {
         //如果角色已死亡
-        if (targetHealth == null || targetHealth.IsDead()) return;
+        if (targetHealth == null || targetHealth.IsDead())
+        {
+            CancelTarget();
+            return;
+        }
 
         if (IsInAttackRange())
         {
@@ -38,6 +42,7 @@ public class Fighter : MonoBehaviour
         }
         else if (LastAttackDuration > attackInterval)
         {
+            animator.SetBool("IsAttack", false);
             mover.MoveTo(targetHealth.transform.position, 1);
         }
 
@@ -52,7 +57,8 @@ public class Fighter : MonoBehaviour
         if(LastAttackDuration > attackInterval)
         {
             LastAttackDuration = 0;
-            TriggerAttack();
+            animator.SetBool("IsAttack", true);
+            //TriggerAttack();
         }
     }
 
@@ -62,6 +68,19 @@ public class Fighter : MonoBehaviour
     {
         animator.SetBool("IsAttack", true);
     }
+
+    //動畫攻擊揮手才扣血
+    private void Hit()
+    {
+        if (targetHealth == null) return;
+
+        if (IsInAttackRange())
+        {
+            targetHealth.TakeDamage(attackDamage);
+        }
+        
+    }
+
     //檢查是否在攻擊範圍內
     private bool IsInAttackRange()
     {
@@ -85,7 +104,7 @@ public class Fighter : MonoBehaviour
         enabled = false;
     }
 
-    //顯示追逐範圍
+    //顯示攻擊範圍
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

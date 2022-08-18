@@ -72,9 +72,6 @@ public class AiController : MonoBehaviour
         animator.SetBool("IsConfuse", false);
         lastSawPlayerTime = 0;
         fighter.Attack(player.GetComponent<Health>());
-
-
-        //mover.MoveTo(player.transform.position, 1);
     }
     //巡邏行為
     private void PatrolBehaviour()

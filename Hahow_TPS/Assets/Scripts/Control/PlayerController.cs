@@ -17,30 +17,54 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravityForce = 50;
     [SerializeField] float distanceToGround = 0.01f;
 
-    //接收來自InputController的通報
+
     InputController main_Input;
     CharacterController controller;
     Animator animator;
+    Health health;
+
     //下一幀移動的目標
     Vector3 targetMovement;
     //下一幀跳躍的方向
     Vector3 jumpDirection;
     //要移動的速度（動畫檢測）
     float lastFrameSpeed;
+    //否在瞄準狀態
+    bool isAim;
 
     private void Awake()
     {
         main_Input = GameManagerSingleton.Instance.InputController;
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        health = GetComponent<Health>();
+
+        health.onDamage += OnDamage;
+        health.onDead += OnDead;
     }
 
     private void Update()
     {
+        AimBehaviour();
         MoveBehaviour();
         JumpBehaviour();
     }
 
+    private void AimBehaviour()
+    {
+        if (main_Input.GetFireInputDown())
+        {
+            isAim = true;
+        }
+        if (main_Input.GetAimInputDown())
+        {
+            isAim = !isAim;
+        }
+
+        animator.SetBool("IsAim", isAim);
+    }
+
+    //移動行為
     private void MoveBehaviour()
     {
         targetMovement = Vector3.zero;
@@ -57,21 +81,24 @@ public class PlayerController : MonoBehaviour
         if (targetMovement == Vector3.zero)
         {
             nextFrameSpeed = 0f;
-            lastFrameSpeed = Mathf.Lerp(lastFrameSpeed, 0, AnimationTransitionRatio);
-
         }
-        else if (main_Input.GetSprintInput())
+        else if (main_Input.GetSprintInput() && !isAim)
         {
             nextFrameSpeed = 1;
 
             targetMovement *= sprintSpeedModifier;
             SmoothRotation(targetMovement);
         }
-        else
+        else if(!isAim)
         {
             nextFrameSpeed = 0.5f;
 
             SmoothRotation(targetMovement);
+        }
+        //如果按下瞄準就永遠面對相機前方
+        if (isAim)
+        {
+            SmoothRotation(GetCameraForward());
         }
 
         //如果按下蹲走
@@ -90,9 +117,12 @@ public class PlayerController : MonoBehaviour
             lastFrameSpeed = Mathf.Lerp(lastFrameSpeed, nextFrameSpeed, AnimationTransitionRatio);
         
         animator.SetFloat("WalkSpeed", lastFrameSpeed);
+        animator.SetFloat("Vertical", main_Input.GetMoveInput().z);
+        animator.SetFloat("Horizontal", main_Input.GetMoveInput().x);
+
         controller.Move(targetMovement * speed * Time.deltaTime);
     }
-
+    //跳躍行為
     private void JumpBehaviour()
     {
         //如果按下跳躍就施加向上的力
@@ -110,6 +140,7 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(jumpDirection * Time.deltaTime);
     }
+
 
     //檢查是否在地上
     private bool IsGrounded()
@@ -142,5 +173,16 @@ public class PlayerController : MonoBehaviour
         //將相機前方向量最大值設為1
         cameraForward.Normalize();
         return cameraForward;
+    }
+
+    //訂閱Health.onDamage
+    private void OnDamage()
+    {
+
+    }
+    //訂閱Health.onDead
+    private void OnDead()
+    {
+        animator.SetTrigger("IsDead");
     }
 }

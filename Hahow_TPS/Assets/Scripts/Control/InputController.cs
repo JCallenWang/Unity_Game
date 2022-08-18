@@ -17,6 +17,7 @@ public class InputController : MonoBehaviour
         ChangeCursorState();
     }
 
+    //檢查是否按下wasd
     public Vector3 GetMoveInput()
     {
         if (CheckCursorState())
@@ -28,7 +29,6 @@ public class InputController : MonoBehaviour
         }
         return Vector3.zero;
     }
-
     //檢查是否按下左Shift
     public bool GetSprintInput()
     {
@@ -56,6 +56,58 @@ public class InputController : MonoBehaviour
         }
         return false;
     }
+
+    
+    //檢查是否按下滑鼠左鍵
+    public bool GetFireInputDown()
+    {
+        if (CheckCursorState())
+        {
+            //0=左鍵  1=右鍵
+            return Input.GetMouseButtonDown(0);
+        }
+        return false;
+    }
+    //檢查是否持續按下滑鼠左鍵
+    public bool GetFireInputHeld()
+    {
+        if (CheckCursorState())
+        {
+            //0=左鍵  1=右鍵
+            return Input.GetMouseButton(0);
+        }
+        return false;
+    }
+    //檢查是否放開滑鼠左鍵
+    public bool GetFireInputUp()
+    {
+        if (CheckCursorState())
+        {
+            //0=左鍵  1=右鍵
+            return Input.GetMouseButtonUp(0);
+        }
+        return false;
+    }
+    //檢查是否按下滑鼠右鍵
+    public bool GetAimInputDown()
+    {
+        if (CheckCursorState())
+        {
+            //0=左鍵  1=右鍵
+            return Input.GetMouseButtonDown(1);
+        }
+        return false;
+    }
+    //檢查是否按下R鍵
+    public bool GetReloadInputDown()
+    {
+        if (CheckCursorState())
+        {
+            return Input.GetKeyDown(KeyCode.R);
+        }
+        return false;
+    }
+
 
     //回傳滑鼠水平
     public float GetMouseXAxis()

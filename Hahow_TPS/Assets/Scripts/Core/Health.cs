@@ -15,28 +15,30 @@ public class Health : MonoBehaviour
 
     bool isDead = false;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         currentHealth = maxHealth;
     }
 
+
+    //取得目前血量
     public float GetCurrentHealth()
     {
         return currentHealth;
     }
-
+    //取得總血量
     public float GetMaxHealth()
     {
 
         return maxHealth;
     }
-
+    //取得血量百分比
     public float GetHealthRatio()
     {
         return currentHealth / maxHealth;
     }
-
+    //取得是否死亡
     public bool IsDead()
     {
         return isDead;

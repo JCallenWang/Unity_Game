@@ -31,7 +31,7 @@ public class Mover : MonoBehaviour
 
         lastFrameSpeed = Mathf.Lerp(lastFrameSpeed, localVelocity.z, animationTransitionRatio);
 
-        GetComponent<Animator>().SetFloat("WalkSpeed", lastFrameSpeed / maxSpeed);
+        GetComponent<Animator>().SetFloat("WalkSpeed", lastFrameSpeed / (maxSpeed-1));
     }
 
     //移動到目標位置，以時間速率
