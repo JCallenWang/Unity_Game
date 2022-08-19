@@ -107,6 +107,16 @@ public class InputController : MonoBehaviour
         }
         return false;
     }
+    //檢查是否按下切換武器(-1往左切換，1往右切換，0不變)
+    public int GetSwitchWeapon()
+    {
+        if (CheckCursorState())
+        {
+            if (Input.GetKeyDown(KeyCode.Q)) return -1;
+            else if (Input.GetKeyDown(KeyCode.E)) return 1;
+        }
+        return 0;
+    }
 
 
     //回傳滑鼠水平

@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravityForce = 50;
     [SerializeField] float distanceToGround = 0.01f;
 
+    //產生可被訂閱的事件，回傳bool值
+    public event Action<bool> onAim;
 
     InputController main_Input;
     CharacterController controller;
@@ -62,6 +64,7 @@ public class PlayerController : MonoBehaviour
         }
 
         animator.SetBool("IsAim", isAim);
+        onAim?.Invoke(isAim);
     }
 
     //移動行為
