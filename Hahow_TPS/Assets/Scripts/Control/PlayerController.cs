@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     private void AimBehaviour()
     {
+        bool lastTimeAim = isAim;
+
         if (main_Input.GetFireInputDown())
         {
             isAim = true;
@@ -63,8 +65,13 @@ public class PlayerController : MonoBehaviour
             isAim = !isAim;
         }
 
+
+        if(lastTimeAim != isAim)
+        {
+            onAim?.Invoke(isAim);
+        }
+
         animator.SetBool("IsAim", isAim);
-        onAim?.Invoke(isAim);
     }
 
     //移動行為

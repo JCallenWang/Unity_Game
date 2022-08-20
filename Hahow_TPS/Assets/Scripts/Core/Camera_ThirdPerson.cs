@@ -21,6 +21,10 @@ public class Camera_ThirdPerson : MonoBehaviour
     [Header("偏移量修正")]
     [SerializeField] Vector3 offset;
 
+    [Header("玩家特效")]
+    [SerializeField] GameObject player;
+    [SerializeField] ParticleSystem beenHitParticle;
+
     //初始相機角度
     float mouse_X = 0;
     float mouse_Y = 10;
@@ -28,6 +32,7 @@ public class Camera_ThirdPerson : MonoBehaviour
     private void Awake()
     {
         main_Input = GameManagerSingleton.Instance.InputController;
+        player.GetComponent<Health>().onDamage += OnDamage;
     }
 
     private void LateUpdate()
@@ -48,5 +53,12 @@ public class Camera_ThirdPerson : MonoBehaviour
             //根據物件中心+輸入旋轉的角度*往後的距離改變位置
             transform.position = target.position + Quaternion.Euler(mouse_Y, mouse_X, 0) * new Vector3(0, 0, -cameraToTargetDistance) + Vector3.up * offset.y;
         }
+    }
+
+    private void OnDamage()
+    {
+        if (beenHitParticle == null) return;
+
+        beenHitParticle.Play();
     }
 }

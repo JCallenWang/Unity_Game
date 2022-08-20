@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
     [Header("一開始就有的武器")]
     [SerializeField] List<WeaponController> startingWeapon = new List<WeaponController>();
     [Tooltip("裝備武器的地方")] [SerializeField] Transform equipWeaponPosition;
-
+    [Tooltip("等待舉槍的時間")] [SerializeField] float waitForAimTime = 2;
 
     //啟用武器的編號
     int activeWeaponIndex;
@@ -171,8 +171,22 @@ public class WeaponManager : MonoBehaviour
     //當接收到PlayerController.onAim.Invoke時，將回傳的bool值帶入到此函式
     private void OnAim(bool value)
     {
-        isAim = value;
+        if (value)
+        {
+            StopAllCoroutines();
+            StartCoroutine(DelayAim());
+        }
+        else
+        {
+            StopAllCoroutines();
+            isAim = value;
+        }
     }
 
+    IEnumerator DelayAim()
+    {
+        yield return new WaitForSecondsRealtime(waitForAimTime);
+        isAim = true;
+    }
 
 }

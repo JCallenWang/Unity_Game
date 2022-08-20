@@ -12,7 +12,7 @@ public class Camera_FollowSmooth : MonoBehaviour
     [Header("與目標的最大距離")]
     [SerializeField] float distanceToTargetLimit;
     [Header("初始參數")]
-    [Tooltip("初始化高度")] [SerializeField] float startHeight;
+    [Tooltip("一開始高度")] [SerializeField] float startHeight;
     [Tooltip("延遲的時間")] [SerializeField] float delayTime;
     [Header("Y軸偏移量修正")]
     [Tooltip("滾輪靈敏度")] [SerializeField] float sensitivityOffset_z;
@@ -32,16 +32,16 @@ public class Camera_FollowSmooth : MonoBehaviour
 
     private void LateUpdate()
     {
-        ////滾輪更改物件高度
-        //if(main_Input.GetMouseScrollWheel() != 0)
-        //{
-        //    offset_y += main_Input.GetMouseScrollWheel() * sensitivityOffset_z;
-        //    offset_y = Mathf.Clamp(offset_y, minAxisOffset_y, maxAxisOffset_y);
-        //
-        //    Vector3 nextMovement = target.position + target.up * offset_y;
-        //    //transform.position = Vector3.Lerp(transform.position, nextMovement, delayTime);
-        //    transform.position = target.position + target.up * offset_y;
-        //}
+        //滾輪更改物件高度
+        if(main_Input.GetMouseScrollWheel() != 0)
+        {
+            offset_y += main_Input.GetMouseScrollWheel() * sensitivityOffset_z;
+            offset_y = Mathf.Clamp(offset_y, minAxisOffset_y, maxAxisOffset_y);
+        
+            Vector3 nextMovement = target.position + target.up * offset_y;
+            transform.position = Vector3.Lerp(transform.position, nextMovement, delayTime);
+            //transform.position = target.position + target.up * offset_y;
+        }
 
         //超過容許距離使物件開始移動
         if (CheckDistance())

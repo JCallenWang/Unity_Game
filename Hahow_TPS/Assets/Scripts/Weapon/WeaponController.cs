@@ -26,8 +26,10 @@ public class WeaponController : MonoBehaviour
     [Tooltip("可以換彈的延遲時間")] [SerializeField] float ammoReloadDelay = 2;
     [Tooltip("最大子彈數量")] [SerializeField] int maxAmmo = 8;
 
+    [Header("槍口特效")]
+    [SerializeField] GameObject muzzleFlashPrefab;
 
-    //設定一個參數可以在外部更改（get外部設定，set為內部資訊）
+    //設定一個參數可以在外部更改（get可以被外部get，set可以被外部設置）
     public GameObject sourcePrefab { get; set; }
 
     //當前子彈數量
@@ -85,6 +87,7 @@ public class WeaponController : MonoBehaviour
 
     private void TryShoot()
     {
+        //上次射擊的時間＋延遲時間<現在的時間（累計）
         if (currentAmmo >= 1 && timeSinceLastShoot + delayBetweenShoots < Time.time)
         {
             HandleShoot();
@@ -100,6 +103,14 @@ public class WeaponController : MonoBehaviour
             newProjectile.Shoot();
         }
 
+        //開火特效
+        if(muzzleFlashPrefab != null)
+        {
+            GameObject newMuzzlePrefab = Instantiate(muzzleFlashPrefab, weaponMuzzle.position, weaponMuzzle.rotation, weaponMuzzle);
+            Destroy(newMuzzlePrefab, 1.5f);
+        }
+
+        //目前的時間
         timeSinceLastShoot = Time.time;
     }
 }
