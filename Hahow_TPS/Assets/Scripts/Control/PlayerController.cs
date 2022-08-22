@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     //產生可被訂閱的事件，回傳bool值
     public event Action<bool> onAim;
+    public event Action onSprint;
+
 
     InputController main_Input;
     CharacterController controller;
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
 
             targetMovement *= sprintSpeedModifier;
             SmoothRotation(targetMovement);
+            onSprint?.Invoke();
         }
         else if(!isAim)
         {

@@ -212,10 +212,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538e6ea1dd0884143bbbd323235c6b9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponicon: {fileID: 21300000, guid: 96771163f51d1b0479aa802e29eb5911, type: 3}
   weaponRoot: {fileID: 2304484830945933887}
   weaponMuzzle: {fileID: 285783717624706734}
   shootType: 0
-  delayBetweenShoots: 0.1
+  delayBetweenShoots: 0.5
   bulletPerShoot: 1
   projectilePrefab: {fileID: 6154238094119836085, guid: e84d60de0834d4792b12a258337e671d, type: 3}
   ammoReloadRate: 1

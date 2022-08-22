@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538e6ea1dd0884143bbbd323235c6b9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponicon: {fileID: 21300000, guid: 75029b918ee4bbe4db6a61dc5889d52c, type: 3}
   weaponRoot: {fileID: 2664277615356867215}
   weaponMuzzle: {fileID: 7646117536929450077}
   shootType: 1

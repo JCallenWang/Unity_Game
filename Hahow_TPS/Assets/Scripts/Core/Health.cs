@@ -6,7 +6,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [Header("血量參數")]
-    [SerializeField] float maxHealth = 10;
+    [SerializeField] float maxHealth;
     [SerializeField] float currentHealth;
 
     public event Action onDamage;
@@ -30,7 +30,6 @@ public class Health : MonoBehaviour
     //取得總血量
     public float GetMaxHealth()
     {
-
         return maxHealth;
     }
     //取得血量百分比

@@ -12,6 +12,7 @@ public enum WeaponShootType
 public class WeaponController : MonoBehaviour
 {
     [Header("武器控制")]
+    [Tooltip("武器Icon")] public Sprite weaponicon;
     [Tooltip("要顯示的武器")] [SerializeField] GameObject weaponRoot;
     [Tooltip("槍口位置")] [SerializeField] Transform weaponMuzzle;
 
@@ -31,9 +32,12 @@ public class WeaponController : MonoBehaviour
 
     //設定一個參數可以在外部更改（get可以被外部get，set可以被外部設置）
     public GameObject sourcePrefab { get; set; }
+    //只能由內部設定，外部取用
+    public float currentAmmoRatio { get; private set; }
+    public bool isCooling { get; private set; }
 
     //當前子彈數量
-    int currentAmmo;
+    float currentAmmo;
     //距離上次射擊的時間
     float timeSinceLastShoot;
     //是否在瞄準狀態
@@ -52,7 +56,24 @@ public class WeaponController : MonoBehaviour
 
     private void UpdateAmmo()
     {
+        if(timeSinceLastShoot + ammoReloadDelay < Time.time && currentAmmo < maxAmmo)
+        {
+            currentAmmo += ammoReloadRate * Time.deltaTime;
 
+            currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+
+            isCooling = true;
+        }
+        else { isCooling = false; }
+
+        if(maxAmmo == Mathf.Infinity)
+        {
+            currentAmmoRatio = 1;
+        }
+        else
+        {
+            currentAmmoRatio = currentAmmo / maxAmmo;
+        }
     }
 
     //要不要顯示武器

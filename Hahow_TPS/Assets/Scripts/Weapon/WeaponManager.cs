@@ -16,6 +16,8 @@ public class WeaponManager : MonoBehaviour
     //是否在瞄準狀態
     bool isAim;
 
+    public event Action<WeaponController, int> onAddWeapon;
+
 
     //限制武器數量，[3] = 0,1,2
     WeaponController[] weapon = new WeaponController[3];
@@ -70,12 +72,12 @@ public class WeaponManager : MonoBehaviour
     {
         int newWeaponIndex;
 
-        //比第一把武器Index小
+        //比第一把武器Index大
         if (activeWeaponIndex + addIndex > weapon.Length - 1)
         {
             newWeaponIndex = 0;
         }
-        //比最後一把武器Index大
+        //比最後一把武器Index小
         else if (activeWeaponIndex + addIndex < 0)
         {
             newWeaponIndex = weapon.Length - 1;
@@ -110,12 +112,12 @@ public class WeaponManager : MonoBehaviour
 
 
     //取得目前active的武器
-    private WeaponController GetActiveWeapon()
+    public WeaponController GetActiveWeapon()
     {
         return GetWeaponAtSlotIndex(activeWeaponIndex);
     }
     //取得在背包中的武器清單
-    private WeaponController GetWeaponAtSlotIndex(int index)
+    public WeaponController GetWeaponAtSlotIndex(int index)
     {
         //找到武器在背包中的編號位置，並回傳武器
         if (index >= 0 && index < weapon.Length - 1 && weapon[index] != null)
@@ -148,6 +150,10 @@ public class WeaponManager : MonoBehaviour
 
                 weapon[i] = newWeaponInstance;
                 print("獲得新武器：" + weaponPrefabs.name);
+
+                //當獲得新武器[i]時Invoke
+                onAddWeapon?.Invoke(newWeaponInstance, i);
+
                 return true;
             }
         }
