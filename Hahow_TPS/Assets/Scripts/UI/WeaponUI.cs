@@ -31,7 +31,7 @@ public class WeaponUI : MonoBehaviour
     {
         for(int i = 0; i < 3; i++)
         {
-            //continue : 繼續執行for迴圈，return會不執行for迴圈
+            //continue : 繼續執行for迴圈，return : 不執行for迴圈
             if (weaponManager.GetWeaponAtSlotIndex(i) == null) continue;
 
             float value = weaponManager.GetWeaponAtSlotIndex(i).currentAmmoRatio;

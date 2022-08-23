@@ -6,10 +6,12 @@ using UnityEngine;
 //管理所有輸入的介面
 public class InputController : MonoBehaviour
 {
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
     }
 
     private void Update()
@@ -56,7 +58,6 @@ public class InputController : MonoBehaviour
         }
         return false;
     }
-
     
     //檢查是否按下滑鼠左鍵
     public bool GetFireInputDown()

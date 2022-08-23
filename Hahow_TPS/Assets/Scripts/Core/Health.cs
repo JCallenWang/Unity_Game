@@ -79,4 +79,11 @@ public class Health : MonoBehaviour
             onDead?.Invoke();
         }
     }
+
+    //恢復血量
+    public void Heal(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
+    }
 }

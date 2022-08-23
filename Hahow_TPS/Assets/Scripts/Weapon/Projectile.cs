@@ -23,7 +23,8 @@ public class Projectile : MonoBehaviour
     [Tooltip("子彈碰撞特效")] [SerializeField] GameObject hitParticle;
     [Tooltip("特效存活時間")] [SerializeField] float particleLifeTime = 2f;
 
-
+    GameObject owner;
+    bool canAttack;
 
     //飛行速度
     Vector3 currentVelocity;
@@ -47,8 +48,9 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Weapon") || other.CompareTag("Player") || other.CompareTag("Projectile")) return;
-        if (other.gameObject.tag == "Enemy" && type == ProjectileType.Collider)
+        if (other.gameObject == owner || !canAttack) return;
+        //if (other.CompareTag("Weapon") || other.CompareTag("Projectile")) return;
+        if ((other.CompareTag("Enemy") || other.CompareTag("Player")) && type == ProjectileType.Collider)
         {
             Health targetHealth = other.gameObject.GetComponent<Health>();
             if (!targetHealth.IsDead())
@@ -63,8 +65,9 @@ public class Projectile : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        if (other.CompareTag("Weapon") || other.CompareTag("Player") || other.CompareTag("Projectile")) return;
-        if (other.gameObject.tag == "Enemy" && type == ProjectileType.Particle)
+        if (other == owner || !canAttack) return;
+        //if (other.CompareTag("Weapon") || other.CompareTag("Projectile")) return;
+        if ((other.gameObject.tag == "Enemy" || other.CompareTag("Player")) && type == ProjectileType.Particle)
         {
             Health targetHealth = other.gameObject.GetComponent<Health>();
             if (!targetHealth.IsDead())
@@ -89,8 +92,10 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    public void Shoot(GameObject gameObject)
     {
+        owner = gameObject;
         currentVelocity = transform.forward * projectileSpeed;
+        canAttack = true;
     }
 }

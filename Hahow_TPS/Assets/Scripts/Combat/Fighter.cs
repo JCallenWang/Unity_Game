@@ -3,12 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//新增攻擊方式
+public enum Actor
+{
+    Melee,
+    Archer,
+    Zombie,
+}
+
 public class Fighter : MonoBehaviour
 {
     [Header("攻擊參數")]
+    [Tooltip("角色攻擊類型")] [SerializeField] Actor actorType;
     [SerializeField] float attackDamage = 10;
     [SerializeField] float attackRange = 2;
     [SerializeField] float attackInterval = 2;
+
+    [Tooltip("遠程攻擊彈藥")] [SerializeField] Projectile throwProjectile;
+    [Tooltip("發出攻擊位置")] [SerializeField] Transform hand;
 
     Mover mover;
     Animator animator;
@@ -57,8 +69,7 @@ public class Fighter : MonoBehaviour
         if(LastAttackDuration > attackInterval)
         {
             LastAttackDuration = 0;
-            animator.SetBool("IsAttack", true);
-            //TriggerAttack();
+            TriggerAttack();
         }
     }
 
@@ -72,21 +83,33 @@ public class Fighter : MonoBehaviour
     //動畫攻擊揮手才扣血
     private void Hit()
     {
-        if (targetHealth == null) return;
+        //沒有目標或是攻擊類型不是近戰
+        if (targetHealth == null || actorType != Actor.Melee) return;
 
         if (IsInAttackRange())
         {
             targetHealth.TakeDamage(attackDamage);
         }
-        
+
     }
+
+    private void Shoot()
+    {
+        if (targetHealth == null || actorType != Actor.Archer) return;
+
+        if (throwProjectile != null)
+        {
+            Projectile newProjectile = Instantiate(throwProjectile, hand.position, Quaternion.LookRotation(transform.forward));
+            newProjectile.Shoot(gameObject);
+        }
+    }
+
 
     //檢查是否在攻擊範圍內
     private bool IsInAttackRange()
     {
         return Vector3.Distance(transform.position, targetHealth.transform.position) < attackRange;
     }
-
 
     public void Attack(Health target)
     {

@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravityForce = 50;
     [SerializeField] float distanceToGround = 0.01f;
 
+    [Header("準星控制")]
+    [SerializeField] GameObject crosshair;
+
     //產生可被訂閱的事件，回傳bool值
     public event Action<bool> onAim;
     public event Action onSprint;
@@ -35,6 +38,7 @@ public class PlayerController : MonoBehaviour
     float lastFrameSpeed;
     //否在瞄準狀態
     bool isAim;
+    bool isDead;
 
     private void Awake()
     {
@@ -49,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isDead) return;
+
         AimBehaviour();
         MoveBehaviour();
         JumpBehaviour();
@@ -67,11 +73,14 @@ public class PlayerController : MonoBehaviour
             isAim = !isAim;
         }
 
-
+        //瞄準狀態有變動就通知
         if(lastTimeAim != isAim)
         {
+            if (crosshair != null) crosshair.SetActive(isAim);
+
             onAim?.Invoke(isAim);
         }
+
 
         animator.SetBool("IsAim", isAim);
     }
@@ -197,5 +206,6 @@ public class PlayerController : MonoBehaviour
     private void OnDead()
     {
         animator.SetTrigger("IsDead");
+        isDead = true;
     }
 }

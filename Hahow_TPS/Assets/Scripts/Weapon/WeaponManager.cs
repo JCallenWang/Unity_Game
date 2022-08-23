@@ -11,6 +11,7 @@ public class WeaponManager : MonoBehaviour
     [Tooltip("裝備武器的地方")] [SerializeField] Transform equipWeaponPosition;
     [Tooltip("等待舉槍的時間")] [SerializeField] float waitForAimTime = 2;
 
+
     //啟用武器的編號
     int activeWeaponIndex;
     //是否在瞄準狀態
@@ -68,7 +69,7 @@ public class WeaponManager : MonoBehaviour
     }
 
     //切換武器編號
-    private void SwitchWeapon(int addIndex)
+    public void SwitchWeapon(int addIndex)
     {
         int newWeaponIndex;
 

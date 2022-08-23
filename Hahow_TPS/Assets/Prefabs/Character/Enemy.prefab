@@ -1370,6 +1370,8 @@ MonoBehaviour:
   attackDamage: 10
   attackRange: 1.5
   attackInterval: 2
+  throwProjectile: {fileID: 0}
+  hand: {fileID: 0}
 --- !u!1 &4783886530657252990
 GameObject:
   m_ObjectHideFlags: 0

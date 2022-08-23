@@ -36,6 +36,9 @@ public class WeaponController : MonoBehaviour
     public float currentAmmoRatio { get; private set; }
     public bool isCooling { get; private set; }
 
+    Health health;
+    bool isDead;
+
     //當前子彈數量
     float currentAmmo;
     //距離上次射擊的時間
@@ -46,6 +49,9 @@ public class WeaponController : MonoBehaviour
     private void Awake()
     {
         currentAmmo = maxAmmo;
+        health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+
+        health.onDead += OnDead;
     }
 
     // Update is called once per frame
@@ -85,6 +91,8 @@ public class WeaponController : MonoBehaviour
     //處理射擊行為
     public void HandleShootInput(bool inputDown, bool inputHeld, bool inputUp)
     {
+        if (isDead) return;
+
         switch (shootType)
         {
             case WeaponShootType.Single:
@@ -121,7 +129,7 @@ public class WeaponController : MonoBehaviour
         for (int i = 0; i < bulletPerShoot; i++)
         {
             Projectile newProjectile = Instantiate(projectilePrefab, weaponMuzzle.position, Quaternion.LookRotation(weaponMuzzle.forward));
-            newProjectile.Shoot();
+            newProjectile.Shoot(GameObject.FindGameObjectWithTag("Player"));
         }
 
         //開火特效
@@ -133,5 +141,10 @@ public class WeaponController : MonoBehaviour
 
         //目前的時間
         timeSinceLastShoot = Time.time;
+    }
+
+    private void OnDead()
+    {
+        isDead = true;
     }
 }
